@@ -1,7 +1,7 @@
 import nltk
 from flask import request
-from flask import jsonify
 from flask import Flask, render_template
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 app = Flask(__name__)
 
@@ -13,19 +13,18 @@ def my_form():
 def my_form_post():
     text = request.form['text']
     nltk.download('vader_lexicon')
-    from nltk.sentiment.vader import SentimentIntensityAnalyzer
     sid = SentimentIntensityAnalyzer()
     score = ((sid.polarity_scores(str(text))))['compound']
     classification = ((sid.polarity_scores(str(text))))['compound']
 
     if(score > 0):
-        label= 'The inputted comment is positive and the score is {}'.format(score)
+        label= 'The text is positive and the score is {}'.format(score)
 
     elif(score == 0):   
-        label = 'The comment is neutral and the score is {}'.format(score)
+        label = 'The text is neutral and the score is {}'.format(score)
         
     else:
-        label = 'The comment is negative and the score is {}'.format(score)
+        label = 'The text is negative and the score is {}'.format(score)
 
     return(render_template('index.html', variable=label))
 
